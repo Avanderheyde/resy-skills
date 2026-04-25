@@ -75,7 +75,9 @@ Useful for catching hot venue drops — Carbone, Torrisi, 4 Charles, etc. releas
 Tell the agent:
 > "On 2026-05-15 at 8:59am ET, use the resy skill to book Carbone for 2 at 9:00pm on 2026-06-14. You have permission to complete the booking without asking me first."
 
-**OpenClaw** — see <fill in OpenClaw scheduler docs URL>
+**OpenClaw** — use the built-in `cron` tool to schedule a job that runs your agent at a specific time:
+- Cron jobs: https://docs.openclaw.ai/automation/cron-jobs
+- CLI reference: https://docs.openclaw.ai/cli/cron
 
 > "Schedule a job for [time]: use the resy skill to book [venue] for [N] at [time] on [date]. Pre-approved."
 
