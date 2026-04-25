@@ -40,9 +40,25 @@ Sign in manually, close. The OpenClaw profile stays signed in across runs. See [
 
 If you can't get a persistent profile working, this skill won't work for you — Resy will see a fresh, signed-out browser every time.
 
-### 2. Add the skill
+### 2. Install the skill
 
-Drop `SKILL.md` wherever your agent reads skills from, or paste its contents into your agent's system prompt / context.
+Skills go in a specific folder your agent watches. Pick the right one for your tool:
+
+**Claude Code** — clone into your personal skills folder:
+```bash
+git clone https://github.com/Avanderheyde/resy-skills ~/.claude/skills/resy
+```
+Restart Claude Code (or run `/skills` to refresh). The `resy` skill should now be available across all projects. Project-scoped install: clone into `.claude/skills/resy` inside your repo instead. See [Claude Code skills docs](https://code.claude.com/docs/en/skills).
+
+**OpenClaw** — clone into your user skills folder:
+```bash
+git clone https://github.com/Avanderheyde/resy-skills ~/.openclaw/skills/resy
+```
+OpenClaw watches the folder and picks up SKILL.md changes automatically. See [OpenClaw skills docs](https://docs.openclaw.ai/tools/skills).
+
+**Codex CLI / other agents** — if your tool doesn't have a skills directory convention, paste the contents of `SKILL.md` into your agent's system prompt, AGENTS.md, or whatever context file it loads.
+
+To verify it's installed, ask your agent: "Do you have the resy skill?" — it should describe what the skill does.
 
 ### 3. Book
 
