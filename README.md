@@ -12,19 +12,33 @@ Your agent navigates Resy in a browser the same way you would — searches for t
 
 ### 1. Sign into Resy in your agent's browser profile
 
-Your agent needs access to a browser profile that's already signed into Resy. How you do this depends on your agent framework:
+Your agent's browser tool runs Chromium with its own profile (separate from your everyday Chrome). That profile starts signed-out. To use this skill, you sign in **once** inside that profile, and the cookies persist for future runs.
 
-**OpenClaw:**
+The trick: the agent has to launch the browser, then you log in in the window it opens. You can't just open your normal Chrome — that's a different profile, and the agent won't see the session.
+
+**Claude Code (chrome-devtools MCP):** This is the easiest case. The chrome-devtools MCP server uses a persistent user-data-dir by default, so cookies stick across runs. In Claude Code:
+
+> "Use the chrome-devtools tool to open https://resy.com in a new page. Leave the page open."
+
+A visible Chromium window appears. Sign in normally. Tell the agent to close the page (or just close the window). Done — next time your agent opens Resy, you're already logged in.
+
+If your config has `isolated: true`, remove it — that flag wipes the profile after each session. See the [chrome-devtools-mcp docs](https://github.com/ChromeDevTools/chrome-devtools-mcp).
+
+**Claude Code (Playwright MCP):** Same idea — ask the agent to navigate to resy.com, log in in the window, close. Make sure your Playwright MCP config uses a persistent context (a fixed `userDataDir`), not the default fresh-context-per-session.
+
+**OpenClaw:** OpenClaw manages a dedicated browser profile through its Gateway:
 ```bash
 openclaw browser open https://resy.com
 ```
-Sign in manually, then close. The `openclaw` profile stays signed in.
+Sign in manually, close. The OpenClaw profile stays signed in across runs. See [OpenClaw browser docs](https://docs.openclaw.ai/tools/browser).
 
-**Claude Code / other agents with Chrome access:**
-Open Chrome (or Chromium) using the persistent profile your agent uses, navigate to `https://resy.com`, and sign in. Your agent will reuse that session.
+**Codex CLI / other agents:** Whatever browser tool your agent uses, the rule is the same:
+1. Configure it to use a persistent profile (look for `--user-data-dir`, `userDataDir`, `storageState`, or "persistent context" in your tool's docs).
+2. Have your agent navigate to `https://resy.com`.
+3. Log in in the window that opens.
+4. Close.
 
-**Generic:**
-Whatever profile your agent's browser tool points to — open it, go to resy.com, log in. Done.
+If you can't get a persistent profile working, this skill won't work for you — Resy will see a fresh, signed-out browser every time.
 
 ### 2. Add the skill
 
